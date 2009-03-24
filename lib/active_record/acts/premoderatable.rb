@@ -7,9 +7,7 @@ module ActiveRecord
       end
       
       module ClassMethods
-        def acts_as_premoderatable(options = {})
-          self.class.state_column
-          
+        def acts_as_premoderatable(options = {})          
           status_column = options[:status_column] || 'status'
           
           acts_as_state_machine :initial => :draft, :column => status_column          
