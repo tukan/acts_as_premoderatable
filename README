@@ -1,0 +1,72 @@
+ActsAsPremoderatable
+====================
+
+This act gives an Active Record model the ability to act as a premoderatable document.
+
+It depends on Max Lapshin's acts_as_state_machine ()
+
+You need to create the status column (by default it's a 'status'), where status of your document will store.
+
+Statuses
+========
+You have five statuses: :deleted, :draft, :pending, :declined, :approved.
+The initial status is :draft
+
+Scopes
+======
+Several named scopes are defined by this plugin:
+
+:not_deleted
+:published
+:unpublished
+:recent
+
+And one for each status:  
+  
+:deleted
+:draft
+:pending
+:declined
+:approved
+
+Callbacks
+=========
+
+You can hook to defined callbacks:
+
+:after_publish, :after_unpublish, :after_acts_as_publishable
+
+InstanceMethods
+===============
+
+You have all methods provided by acts_as_state_machine, like approve!, approved?, delete!, deleted? and so on...
+
+And some defined by this plugin:
+
+is_published and is_published? (here published is a synonym to :approved status)
+
+publish!(user) and unpublish!(user)
+
+These methods have an argument of something like a user. You need to pass here a person who publishes
+this document. So according to status and self.can_approve?(user) or self.can_decline?(user) (which you should define by yourself)
+new status will apply.
+
+
+Example
+=======
+
+class Look < ActiveRecord::Base
+	acts_as_premoderatable
+	
+	#methods for acts_as_premoderatable
+	def can_approve?(user)
+    user.editor?
+  end
+
+  def can_decline?(user)
+    user.editor?
+  end
+
+
+
+Copyright (c) 2009 Timothy N. Tsvetkov (timothy.tsvetkov@gmail.com), released under the MIT license
